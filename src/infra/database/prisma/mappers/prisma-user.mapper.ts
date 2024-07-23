@@ -2,7 +2,7 @@ import { AccountStatusEnum, UserEntity } from '@app/entities/user.entity';
 import { User } from '@prisma/client';
 
 export class PrismaUserMapper {
-  static toPrisma(user: UserEntity): User {
+  static toPrisma(user: Partial<UserEntity>): User {
     return {
       userId: user.userId,
       username: user.username,

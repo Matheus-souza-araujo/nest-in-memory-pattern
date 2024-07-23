@@ -42,9 +42,12 @@ export class PrismaUserRepository implements UserRepository {
   findAll(): Promise<UserEntity[]> {
     throw new Error('Method not implemented.');
   }
-  async findByUserName(username: string): Promise<UserEntity> {
+  async findByUserName(username: string, userId?: string): Promise<UserEntity> {
     const user = await this.prismaService.user.findUnique({
-      where: { username },
+      where: {
+        username,
+        NOT: { userId: userId },
+      },
     });
 
     if (!user) {
@@ -54,8 +57,10 @@ export class PrismaUserRepository implements UserRepository {
     return PrismaUserMapper.toDomain(user);
   }
 
-  async findByEmail(email: string): Promise<UserEntity> {
-    const user = await this.prismaService.user.findUnique({ where: { email } });
+  async findByEmail(email: string, userId?: string): Promise<UserEntity> {
+    const user = await this.prismaService.user.findUnique({
+      where: { email, NOT: { userId: userId } },
+    });
 
     if (!user) {
       return null;
@@ -63,8 +68,11 @@ export class PrismaUserRepository implements UserRepository {
 
     return PrismaUserMapper.toDomain(user);
   }
-  update(user: Partial<UserEntity>): Promise<void> {
-    throw new Error('Method not implemented.');
+  async update(user: Partial<UserEntity>): Promise<void> {
+    await this.prismaService.user.update({
+      where: { userId: user.userId },
+      data: PrismaUserMapper.toPrisma(user),
+    });
   }
   delete(userId: string): Promise<void> {
     throw new Error('Method not implemented.');

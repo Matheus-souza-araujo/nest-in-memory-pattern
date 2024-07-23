@@ -1,11 +1,11 @@
-import { UsersUseCaseModule } from '@app/usecases/users/users-usecase.module';
 import { Module } from '@nestjs/common';
-import { CreateUserController } from './controllers/users/create-user.controller';
+import { UsersController } from './controllers/users/users.controller';
+import { UsersUseCaseModule } from '@app/usecases/users/users-usecase.module';
 
 @Module({
   imports: [UsersUseCaseModule],
   providers: [],
   exports: [],
-  controllers: [CreateUserController],
+  controllers: [UsersController],
 })
 export class HttpModule {}
